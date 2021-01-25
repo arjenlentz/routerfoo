@@ -1,0 +1,11 @@
+# An ipset network list
+# Networks we want to allow traffic out to without a DNS lookup
+# I expect mainly gaming servers...
+# Don't put too many things here, it defeats the purpose.
+
+# Blizzard entertainment
+37.244.19.0/24
+
+# Your contributions!
+
+# EOF
