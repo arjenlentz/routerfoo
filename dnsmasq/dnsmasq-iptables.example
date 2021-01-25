@@ -1,0 +1,13 @@
+# These bits go in to your *filter table
+
+# Let through response-traffic for DNS and NTP
+-A INPUT -i <isp> -p udp -m state --state ESTABLISHED -m udp -m multiport --sports 53,123 -j ACCEPT
+
+# Allow local DNS requests
+-A INPUT -i <lan> -s <localnet>/24 -i enp1s0 -p udp -m udp --dport 53 -j ACCEPT
+-A INPUT -i <lan> -s <localnet>/24 -i enp1s0 -p tcp -m tcp --dport 53 -j ACCEPT
+-A INPUT -i <bridge> -s <bridge-ips>/29 -p udp -m udp --dport 53 -j ACCEPT
+-A INPUT -i <bridge> -s <bridge-ips>/29 -p tcp -m tcp --dport 53 -j ACCEPT
+
+# Allow local DHCP requests
+-A INPUT -i <lan> -p udp -m udp --dport 67 -j ACCEPT
