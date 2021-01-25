@@ -16,18 +16,18 @@ I first talked to the board's BIOS via a serial cable (was already up-to-date, g
 And behold, my NBN HFC connection is now stable, and faster.
 
 Maybe you would like to do something similar, or maybe you just want to pick up a few of the things that I've done - you can do any of this with a regular Linux box as well:
- - A few of the ports are configured as a switch, using bridged network interfaces.
- - One port talks to the NBN HFC modem with PPPoE connection and a VLAN, insisting it's actually the original ISP-provided device.
- - IPv4/IPv6 native dual stack, each with subnets (I just have those, from when I ran a company from home)
- - Outbound rate-limiting on the HFC connection to keep the stupid NBN happy.
- - Appropriate kernel tuning via sysctl - seemingly quite necessary for dealing with funny traffic!
- - A hand-crafted effective firewall, providing safety but also (when desired) insights in what fun tries to scan and gain access, how and from where.
- - Configuring -Unbound DNS- DNSmasq to get rid of most ads on the LAN.
- - Surviving a reasonably-sized DDoS or other attack without flinching too much.
- - Using dynamic geo-blocking, again with options to gain insight.
- - WireGuard VPN end-point, both for my own devices and for geo-tunneling (using policy routing) (* see below for a WireGuard love story)
- - Optional RKhunter and Suricata intrusion detection/prevention.
- - Being invisible for scans, if so desired.
+* A few of the ports are configured as a switch, using bridged network interfaces.
+* One port talks to the NBN HFC modem with PPPoE connection and a VLAN, insisting it's actually the original ISP-provided device.
+* IPv4/IPv6 native dual stack, each with subnets (I just have those, from when I ran a company from home)
+* Outbound rate-limiting on the HFC connection to keep the stupid NBN happy.
+* Appropriate kernel tuning via sysctl - seemingly quite necessary for dealing with funny traffic!
+* A hand-crafted effective firewall, providing safety but also (when desired) insights in what fun tries to scan and gain access, how and from where.
+* Configuring -Unbound DNS- DNSmasq to get rid of most ads on the LAN.
+* Surviving a reasonably-sized DDoS or other attack without flinching too much.
+* Using dynamic geo-blocking, again with options to gain insight.
+* WireGuard VPN end-point, both for my own devices and for geo-tunneling (using policy routing) (* see below for a WireGuard love story)
+* Optional RKhunter and Suricata intrusion detection/prevention.
+* Being invisible for scans, if so desired.
 Extra options are adding mobile data backup with an on-board SIM card (may do), and wifi.
 
 In this talk I will show what it all looks like on the outside and inside, and go over the configuration - understandable for small league nerds.
@@ -44,4 +44,3 @@ Tutorials abound, but some things have changed since. Aargh.
 So now that the dust has settled, let's look at this from the non-whizz perspective.
 How to peer, or set up a server with clients, or a network tunnel with policy routing.
 I'm not the expert, but I've made it work and I can explain what I did.
-===
