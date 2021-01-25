@@ -1,0 +1,19 @@
+In /etc/rc.local
+ipset -exist create inet.dnsmasq.list hash:ip family inet timeout 86400
+ipset -exist create dns-ip-gate-allow.list hash:net family inet
+
+# /etc/dnsmasq.conf
+# This is fabulous: DNSmasq can add IPs from a DNS lookup to an ipset!
+# If we specify multiply ipsets, each will store according to its nature (e.g. an ipv4 and an ipv6 one)
+ipset=/#/inet.dnsmasq.list
+
+# In iptables we may need a few exceptions – yea we need to restrict the NTP better
+-A FORWARD -o internode -p udp -m udp -m multiport --dports 123 -j ACCEPT
+
+# Hint: if you’re a gamer, you may need to monitor and add some more exceptions
+# So let's crowdsource a good list! I've created dns-ip-gate-allow.list
+-A FORWARD -o <isp> -m set --match-set dns-ip-gate-allow.list dst -j ACCEPT
+
+# So any routed outbound traffic that’s not in the DNSmasq ipset... drop!
+# Malware/C2/exfiltration often use direct IPs, DNS-over-TLS, DNS-over-HTTPS, etc.
+-A FORWARD -o <isp> -m set ! --match-set inet.dnsmasq.list dst -j MASQ_LOGDROP
