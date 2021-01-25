@@ -1,0 +1,31 @@
+# WireGuard (WG) server config (save as /etc/wireguard/wg0.conf)
+# by Arjen Lentz, arjen (at) lentz (dot) com (dot) au
+
+# WG is peer-to-peer, but you'd have something like this on a router.
+
+# This file is complete, it's literally all you need to make this work.
+# Note: you will require some firewall rules, of course.
+
+# Reminder how easy it is to generate private and pub key...
+# wg genkey | tee server-private.sec | wg pubkey > server-public.key
+
+[Interface]
+Address = <server-private-addr>/24
+Table = off
+SaveConfig = true
+ListenPort = 51820
+FwMark = 0xca6c
+PrivateKey = <content of server-private.sec>
+
+# My roaming laptop
+[Peer]
+PublicKey = <peer-pub-key>
+AllowedIPs = <peer-pvt-addr>/32
+
+# VPN host in other country
+[Peer]
+PublicKey = <peer-pub-key>
+AllowedIPs = <peer-pvt-addr>/32, 0.0.0.0/0
+Endpoint = <peer-pub-addr>:51820
+
+# EOF
