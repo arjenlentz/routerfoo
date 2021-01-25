@@ -1,0 +1,25 @@
+# WireGuard (WG) roaming laptop config (save as /etc/wireguard/wg0.conf)
+# by Arjen Lentz, arjen (at) lentz (dot) com (dot) au
+
+# WG is peer-to-peer, but you'd have something like this on a (roaming) laptop.
+
+# This file is complete, it's literally all you need to make this work.
+# Note: you will require some firewall rules, of course.
+# You may need to ensure wg0 goes up (or even down/up) when any wired/wireless iface goes up
+# You can point resolv.conf at the pvt addr of the nameserver on the VPN server (or run a local DNSmasq)
+
+# Reminder how easy it is to generate private and pub key...
+# wg genkey | tee server-private.sec | wg pubkey > server-public.key
+
+[Interface]
+PrivateKey = <our-private-key>
+Address = <our-pvt-addr>
+
+# So this refers to our "server" peer.
+[Peer]
+PublicKey = <server-public-key>
+Endpoint = <server-public-addr>:51820
+# I want everything to run across the VPN, no split tunneling
+AllowedIPs = 0.0.0.0/0
+
+# EOF
