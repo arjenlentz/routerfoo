@@ -1,0 +1,26 @@
+# WireGuard (WG) tunnel host config (save as /etc/wireguard/wg0.conf)
+# by Arjen Lentz, arjen (at) lentz (dot) com (dot) au
+
+# WG is peer-to-peer, but you'd have something like this on a tunnel host exit point.
+
+# This file is complete, it's literally all you need to make this work.
+# Note: you will require some firewall rules, of course.
+
+# Reminder how easy it is to generate private and pub key...
+# wg genkey | tee server-private.sec | wg pubkey > server-public.key
+
+[Interface]
+Address = <our-pvt-addr>/32
+SaveConfig = true
+PostUp = iptables -t nat -A POSTROUTING -s <our-pvt-addr>/24 -o <extiface> -j SNAT --to-source <our-public-addr>
+PostDown = iptables -t nat -D POSTROUTING -s <our-pvt-addr>/24 -o <extiface> -j SNAT --to-source <our-public-addr>
+ListenPort = 51820
+PrivateKey = <our-private-key>
+
+# This is the link back to our main VPN host
+[Peer]
+PublicKey = <peer-pub-key>
+AllowedIPs = <peer-pvt-addr>/32
+Endpoint = <peer-pub-addr>:51820
+
+# EOF
