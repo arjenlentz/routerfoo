@@ -1,0 +1,34 @@
+Geo-based WireGuardVPN using policy-based routing
+by Arjen Lentz, arjen (at) lentz (dot) com (dot) au
+
+Policy-based routing allows us to route all IP networks that 'belong' with a particular country across a specific interface.
+You can use this if, for instance, you're an expat and you'd like to view TV in your country of origin.
+
+Note:
+Some adjustments may be required, because often these sites (also) use hosts elsewhere, not in that country.
+So you'll need to go to the site without other things running, while monitoring your outbound traffic.
+When you get a fail, you'll hopefully be able to spot which extra IPs/subnets you need to add to the party.
+Please contribute them back here! One extra file per country, perhaps?
+
+Policy-based routing in your tables:
+-A PREROUTING -j mPOLROUTE
+-A FORWARD -j mPOLROUTE
+-A OUTPUT -j mPOLROUTE
+-A mPOLROUTE -d <peer-pub-addr>/32 -j RETURN
+-A mPOLROUTE -m set --match-set <country-net-list> dst -j MARK --set-xmark 0xc21/0xffffffff
+-A mPOLROUTE -j RETURN
+
+You may need some or all of the below in /etc/rc.local to have it come up at boot time
+Not all of the below may be required any more, WG has become ever smarter.
+Check the output when you do the wg-quick up, WG will show what things it sets based on your config!
+And yes, it'll do the same when you issue the 'down' command for a WG interface.
+
+Note that the 3105 (decimal) matches up with the 0xc21 (hex) above. You can use another number.
+# systemctl start wg-quick@wg0
+# ip route add <server-pvt-addr> dev wg0
+# ip route add table wg.some.country default via <server-pvt-addr> dev wg0
+# ip rule add priority 1000 from all fwmark 3105 lookup wg.some.country
+# ip rule add table main suppress_prefixlength 0
+# ip route flush cache
+
+EOF
