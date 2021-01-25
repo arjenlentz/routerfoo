@@ -1,0 +1,6 @@
+# General rules for WireGuard
+# You can/should make this more strict all the way to zero-trust!
+-A INPUT -i wg0 -j ACCEPT
+-A FORWARD -i wg0 -j ACCEPT
+-A FORWARD -o wg0 -j ACCEPT
+-A OUTPUT -o wg0 -j ACCEPT
