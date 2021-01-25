@@ -1,0 +1,25 @@
+# Snippets for DNSmasq (add to /etc/dnsmasq.conf)
+# by Arjen Lentz, arjen (at) lentz (dot) com (dot) au
+
+# Use Cloudflare’s DNS
+# 1.1.1.1, or 1.1.1.2 for extra malware filtering
+server=/#/1.1.1.2
+# Cache a fair number of lookups
+cache-size=8192
+
+# These files use the /etc/hosts format
+# We fill them with "domain 0.0.0.0" type entries to block an entire domain and its subdomains.
+# It appears that a 0.0.0.0 response works even better for apps than an NX_DOMAIN (not found).
+# Best updated with a script in /etc/cron.weekly
+
+# This is a a good list of ad servers
+# wget -O - "https://pgl.yoyo.org/as/serverlist.php?hostformat=nohtml" \
+#      | awk '{printf "0.0.0.0 %s\n", $1}' >/etc/dnsmasq_ad_servers
+addn-hosts=/etc/dnsmasq_ad_servers
+
+# This is a list of "bad" servers, known to host malware etc.
+# wget -O - "https://someonewhocares.org/hosts/zero/" \
+#      | grep "^0.0.0.0" >/etc/dnsmasq_bad_servers
+addn-hosts=/etc/dnsmasq_bad_servers
+
+# EOF
