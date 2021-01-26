@@ -1,0 +1,22 @@
+# PREROUTING in Mangle table
+
+# forget doing complex xmas packet detection, these do the job.
+-A PREROUTING -m state --state INVALID -j mPRE_LOGDROP
+-A PREROUTING -p tcp -m tcp ! --tcp-flags FIN,SYN,RST,PSH,ACK,URG SYN -m state --state NEW -j DROP
+
+# weirdly sized packets: ditch
+-A PREROUTING -i <isp> -p tcp -m conntrack --ctstate NEW -m tcpmss ! --mss 536:65535 -j mPRE_LOGDROP
+
+# no “RELATED”, it’s dangerous. We don’t have FTP and we can deal with SIP separately
+-A PREROUTING -m state --state ESTABLISHED -j ACCEPT
+
+# fragmented packets: ditch (interesting eh?) I don’t actually see hits on this one anyway
+-A PREROUTING -i internode -f -j DROP
+
+# More on this... see mblock.example
+-A PREROUTING -i internode -j mBLOCK
+
+# Ensure outbound sanity
+-A FORWARD -o internode -p tcp -m tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1400:65495 -j TCPMSS --clamp-mss-to-pmtu
+
+# EOF
