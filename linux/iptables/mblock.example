@@ -1,6 +1,9 @@
 # mBLOCK is a "subroutine" target used from the Mangle table's PREROUTING rules.
 # by arjen (at) lentz (dot) com (dot) au
 
+# Ensure that the specific ipsets exist before referencing them in iptables!
+# See update-ipsets.sh.example
+
 # mBLOCK: RETURN = allow through
 
 -A mBLOCK -m set --match-set inet.pingdom.list src -j RETURN
@@ -8,7 +11,6 @@
 -A mBLOCK -s <friendlynet>/24 -j RETURN
 
 # Yep, geo blocking. Reduce noise
-# See update-ipsets.sh.example
 -A mBLOCK -m set --match-set inet.au.zone src -j RETURN
 -A mBLOCK -m set --match-set inet.nl.zone src -j RETURN
 
