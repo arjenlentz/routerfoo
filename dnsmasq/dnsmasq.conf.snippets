@@ -2,8 +2,12 @@
 # by Arjen Lentz, arjen (at) lentz (dot) com (dot) au
 
 # Use Cloudflare’s DNS
-# 1.1.1.1, or 1.1.1.2 for extra malware filtering
+# 1.1.1.1/1.0.0.1, or 1.1.1.2/1.0.0.2 for extra malware filtering, plus secondary
 server=/#/1.1.1.2
+server=/#/1.0.0.2
+#server=/#/2606:4700:4700::1111
+#server=/#/2606:4700:4700::1001
+
 # Cache a fair number of lookups
 cache-size=8192
 
