@@ -1,0 +1,69 @@
+# /etc/network/interfaces
+# by arjen (at) lentz (dot) com (dot) au
+# This is somewhat specific to the PCengines apu4d4 and my setup, but it gives a good overview of the different options (bridge, vlan, etc) you might need.
+
+# first general stuff
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# This is my stuff
+auto enp1s0 br0
+auto vlan2 enp4s0
+auto wlp5s0
+
+
+# Internal: wired LAN private subnet /24
+iface enp1s0 inet static
+  address <lan-addr>/24
+# allow jumbo frames on the LAN
+  mtu 9000
+
+# Internal: wireless LAN private subnet
+iface wlp5s0 inet static
+  address <wifi-addr>/24
+  hostapd /etc/hostapd/hostapd.conf
+
+
+# We're briging eth 2 and 3 to create a switch
+# make sure you have bridge-utils package installed!
+iface br0 inet static
+  address <bridge-addr>/29
+# WARNING using mtu here makes ifup fail!
+# mtu 9000
+  bridge_ports enp2s0 enp3s0
+  bridge_stp off
+  bridge_fd 0
+  bridge_maxwait 5
+  pre-up /sbin/ip link set enp2s0 up
+  pre-up /sbin/ip link set enp3s0 up
+
+
+# Internode uses VLAN 2 with PPPoE
+# make sure you have vlan package installed!
+iface vlan2 inet manual
+  vlan-raw-device enp4s0
+  pre-up /sbin/ip link set enp4s0 up
+  mtu 1508
+#  post-up ifup hfc ; true
+#  pre-down ifdown hfc ; true
+
+
+# External: ISP Internode HFC NBN (PPPoE VLAN 2)
+# connected to on NBN modem
+iface enp4s0 inet manual
+  hwaddress <mac-addr-of-provided-router>
+
+# PPPoE to Internode
+iface hfc inet ppp
+  pre-up /sbin/ip link set vlan2 up
+# for pppd
+  provider hfc-internode
+
+
+# EOF
