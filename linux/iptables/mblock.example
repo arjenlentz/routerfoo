@@ -1,0 +1,27 @@
+# mBLOCK is a "subroutine" target used from the Mangle table's PREROUTING rules.
+# by arjen (at) lentz (dot) com (dot) au
+
+# mBLOCK: RETURN = allow through
+
+-A mBLOCK -m set --match-set inet.pingdom.list src -j RETURN
+-A mBLOCK -s <friendlyip>/32 -j RETURN
+-A mBLOCK -s <friendlynet>/24 -j RETURN
+
+# Yep, geo blocking. Reduce noise
+# See update-ipsets.sh.example
+-A mBLOCK -m set --match-set inet.au.zone src -j RETURN
+-A mBLOCK -m set --match-set inet.nl.zone src -j RETURN
+
+# Would be nice to also have a list for Let’s Encrypt... they don’t give one!
+# We can probably get it down to a [few] AS network(s), through monitoring?
+# Alternatively, we can either:
+# - allow the very noisy US block through when updating our certificates;
+# - Use the DNS verification method (best, however can be finicky to set up).
+
+# Invalid network ranges of any kind
+-A mBLOCK -m set --match-set inet.fullbogons.list src -j DROP
+
+# Swift byebye to everything else
+-A mBLOCK -j DROP
+
+# EOF
