@@ -1,0 +1,15 @@
+# put in /etc/apt/apt.conf.d/00apt-routerfoo
+# by arjen 2020-07-11 based on Debian Security Manual
+
+# because /tmp mounted noexec, we have apt use /var/tmp instead. Easy.
+APT::ExtractTemplates::TempDir "/var/tmp";
+
+# If /usr mounted ro
+# This tends to not work nicely in practice, because various daemons keep stuff open in there.
+#DPkg
+#{
+#    Pre-Invoke  { "mount /usr -o remount,rw" };
+#    Post-Invoke { "mount /usr -o remount,ro", "true" };
+#};
+
+# EOF
