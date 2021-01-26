@@ -1,0 +1,84 @@
+# /etc/ppp/options
+# 
+# Originally created by Jim Knoble <jmknoble@mercury.interpath.net>
+# Modified for Debian by alvar Bray <alvar@meiko.co.uk>
+# Modified for PPP Server setup by Christoph Lameter <clameter@debian.org>
+# Some filtering by arjen (at) lentz (dot) com (dot) au
+# only showing enabled options here
+
+# async character map -- 32-bit hex; each bit is a character
+# that needs to be escaped for pppd to receive it.  0x00000001
+# represents '\x01', and 0x80000000 represents '\x1f'.
+asyncmap 0
+
+# Require the peer to authenticate itself before allowing network
+# packets to be sent or received.
+# Please do not disable this setting. It is expected to be standard in
+# future releases of pppd. Use the call option (see manpage) to disable
+# authentication for specific peers.
+auth
+
+# Use hardware flow control (i.e. RTS/CTS) to control the flow of data
+# on the serial port.
+crtscts
+
+# Specifies that pppd should use a UUCP-style lock on the serial device
+# to ensure exclusive access to the device.
+lock
+
+# Don't show the passwords when logging the contents of PAP packets.
+# This is the default.
+hide-password
+
+# Use the modem control lines.  On Ultrix, this option implies hardware
+# flow control, as for the crtscts option.  (This option is not fully
+# implemented.)
+modem
+
+# Increase debugging level (same as -d).  If this option is given, pppd
+# will log the contents of all control packets sent or received in a
+# readable form.  The packets are logged through syslog with facility
+# daemon and level debug. This information can be directed to a file by
+# setting up /etc/syslog.conf appropriately (see syslog.conf(5)).  (If
+# pppd is compiled with extra debugging enabled, it will log messages
+# using facility local2 instead of daemon).
+debug
+
+# If this option is given, pppd will send an LCP echo-request frame to the
+# peer every n seconds. Normally the peer should respond to the echo-request
+# by sending an echo-reply. This option can be used with the
+# lcp-echo-failure option to detect that the peer is no longer connected.
+lcp-echo-interval 30
+
+# If this option is given, pppd will presume the peer to be dead if n
+# LCP echo-requests are sent without receiving a valid LCP echo-reply.
+# If this happens, pppd will terminate the connection.  Use of this
+# option requires a non-zero value for the lcp-echo-interval parameter.
+# This option can be used to enable pppd to terminate after the physical
+# connection has been broken (e.g., the modem has hung up) in
+# situations where no hardware modem control lines are available.
+lcp-echo-failure 4
+
+# Disable the IPXCP and IPX protocols.
+# To let pppd pass IPX packets comment this out --- you'll probably also
+# want to install ipxripd, and have the Internal IPX Network option enabled
+# in your kernel.  /usr/doc/HOWTO/IPX-HOWTO.gz contains more info.
+noipx
+
+# Do not exit after a connection is terminated; instead try to reopen
+# the connection.
+persist
+
+# Packet filtering: for more information, see pppd(8)
+# Any packets matching the filter expression will be interpreted as link
+# activity, and will cause a "demand" connection to be activated, and reset
+# the idle connection timer. (idle option)
+# The filter expression is akin to that of tcpdump(1)
+#active-filter <filter-expression>
+ipv6 ,
+#defaultroute
+#nodefaultroute
+#+ipv6
+#ipv6cp-accept-local
+
+# ---<End of File>---
