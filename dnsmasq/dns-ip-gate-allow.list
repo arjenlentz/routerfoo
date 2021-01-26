@@ -3,8 +3,11 @@
 # I expect mainly gaming servers...
 # Don't put too many things here, it defeats the purpose.
 
-# Blizzard entertainment
+# Blizzard entertainment - Overwatch/Warthunder
 37.244.19.0/24
+
+# Apple Facetime
+17.252.252.0/24
 
 # Your contributions!
 
