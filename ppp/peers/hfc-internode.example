@@ -1,0 +1,49 @@
+# Configuration file for PPP, using PPP over Ethernet 
+#
+# See the manual page pppd(8) for information on all the options.
+# Stuff to configure...
+
+# MUST CHANGE: Uncomment the following line, replacing the user@provider.net
+# by the user name given to your by your provider.
+# (There should be a matching entry in /etc/ppp/pap-secrets with the password.)
+user "accountname@internode.on.net"
+
+
+# The following two options should work fine for most users.
+
+# Assumes that your IP address is allocated dynamically
+# by your provider...
+noipdefault
+# Try to get the name server addresses from the ISP.
+# Use this connection as the default route.
+# Comment out if you already have the correct default route installed.
+defaultroute
+
+
+# You shouldn't need to change these options...
+
+hide-password
+lcp-echo-interval 20
+lcp-echo-failure 3
+# Override any connect script that may have been set in /etc/ppp/options.
+connect /bin/true
+noauth
+persist
+mtu 1492
+
+# RFC 2516, paragraph 7 mandates that the following options MUST NOT be
+# requested and MUST be rejected if requested by the peer:
+# Address-and-Control-Field-Compression (ACFC)
+noaccomp
+# Asynchronous-Control-Character-Map (ACCM)
+default-asyncmap
+lock
+ipv6 ,
+ifname internode
+plugin rp-pppoe.so vlan2
+nic-vlan2
+#we don't want to use the ISP's DNS
+#usepeerdns
+
+
+# EOF
