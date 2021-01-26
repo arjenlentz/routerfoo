@@ -1,0 +1,10 @@
+The idea of SYNPROXY is that the connection tracker on the router acts as a proxy for the TCP connections of any servers on the LAN/switch
+This may improve security on the servers as those connections will always be more trusted (as they essentially come from our router).
+
+*raw
+-A PREROUTING -i <isp> -p tcp -m tcp -m multiport --dports 80,443,... --syn -j CT --notrack
+
+*filter
+-A INPUT -i <isp> -p tcp -m state --state UNTRACKED,INVALID -j SYNPROXY --sack-perm --timestamp --mss 1460 --wscale 9
+
+I didn’t get any joy out of this, so not using it right now. You, perhaps?
