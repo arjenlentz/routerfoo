@@ -1,0 +1,58 @@
+#!/bin/bash
+# update-ipsets.sh.example
+# by arjen (at) lentz (dot) com (dot) au
+
+# ipset is our friend, feed it regularly
+# You could put this script in /etc/cron.weekly
+# It is presumed that this script runs as root (or through sudo), otherwise ipset won't let you do stuff
+# Please feel encouraged to improve on this script and contribute back: make it better & safer!
+
+
+# We use a 30 day timeout on entries, so that should work out ok (30 * 86400 seconds = 2592000)
+TIMEOUT=2592000
+
+# We distinguish between a list of IPs (.list) and a list of subnets (.zone)
+# ipset handles these through respectively hash:ip and hash:net
+
+
+# helper function to process a file into an ipset
+# load_ipset <setname> <type> <sourcefile>
+# type should be hash:net or hash:ip
+load_ipset() {
+  if [ ! -f "$3" ]; then
+    echo "File $3 does not exist"
+    return 0
+  fi
+
+  # create the ipset if it doesn't yet exist, with timeout, and counters for stats
+  ipset -exist create $1 $2 family inet timeout $TIMEOUT counters
+
+  echo "Reading in file $3 to ipset $1"
+  while read line; do
+    # filter out empty lines and comment lines (start with #)
+    string=$(echo $line | grep -Ev '(^#|^\s$)')
+    if [ -n "$string" ]; then
+      ipset -exist add $1 $string
+    fi
+  done < $3
+}
+
+
+# We set -4 just in case IPv6 isn't working. If you're very sure, feel free to remove!
+
+wget -4 -O /tmp/inet.pingdom.list https://my.pingdom.com/probes/ipv4
+load_ipset "inet.pingdom.list" "hash:ip" /tmp/inet.pingdom.list
+
+wget -4 -O /tmp/inet.fullbogons.list https://www.team-cymru.org/Services/Bogons/fullbogons-ipv4.txt
+load_ipset "inet.fullbogons.zone" "hash:net" /tmp/inet.fullbogons.zone
+
+for COUNTRY in au nz nl de gb cn hk ru ch us in ir il kp ua ge mo af vn jp ca bh sa
+do
+  wget -4 -O /tmp/inet.${COUNTRY}.zone https://www.ipdeny.com/ipblocks/data/aggregated/${COUNTRY}-aggregated.zone
+  load_ipset "inet.${COUNTRY}.zone" "hash:net" /tmp/inet.${COUNTRY}.zone
+#  wget -4 -O /tmp/inet6.${COUNTRY}.zone https://www.ipdeny.com/ipv6/ipaddresses/aggregated/${COUNTRY}-aggregated.zone
+#  load_ipset "inet6.${COUNTRY}.zone" "hash:net" /tmp/inet6.${COUNTRY}.zone
+done
+
+
+# EOF
