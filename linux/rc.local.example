@@ -9,7 +9,11 @@
 
 # ipsets need to exist, otherwise iptables won't restore.
 # we save to /etc/iptables/ipset.v4 from update-ipsets.sh.example
-/usr/sbin/ipset restore </etc/iptables/ipset.v4
+# make sure you have this script copied in from Arjen's router foo repo
+# (the iptables/netfilter-persistent scripts don't cover ipset)
+/usr/share/netfilter-persistent/plugins.d/05-ip4set load
+# alternatively, uncomment this line
+# /usr/sbin/ipset restore </etc/iptables/ipset.v4
 
 # create the DNSmasq related ipsets (see dnsmasq/dns-ip-gate.txt)
 /usr/sbin/ipset -exist create inet.dnsmasq.list hash:ip family inet timeout 86400 counters
