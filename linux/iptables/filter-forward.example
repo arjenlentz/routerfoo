@@ -1,0 +1,31 @@
+# FORWARD in Filter table (default=DROP)
+
+# let through traffic from LAN
+-A FORWARD -i enp1s0 -s <localnet>/24 -j ACCEPT
+# let through traffic from wifi
+-A FORWARD -i wlp5s0 -s <localnet>/24 -j ACCEPT
+# let through traffic from specific friendly IPs
+-A FORWARD -s <friendly-ip>/32 -j ACCEPT
+# ...
+
+# let through packets for already established connections
+-A FORWARD -m state --state ESTABLISHED -j ACCEPT
+
+# beyond here we're only looking at new connections (or connectionless protocols)
+
+# We only need to let these ICMP types through, drop anything else
+# See https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
+-A FORWARD -p icmp -m icmp --icmp-type 8/0 -m state --state NEW,RELATED -m limit --limit 50/sec -j ACCEPT
+-A FORWARD -p icmp -m icmp --icmp-type 3/4 -m limit --limit 50/sec -j ACCEPT
+-A FORWARD -p icmp -m icmp --icmp-type 11/0 -m limit --limit 50/sec -j ACCEPT
+-A FORWARD -p icmp -j DROP
+
+# More restrictive acceptance: only for specific ports
+# Limit floods per /24 subnet (that makes for a table of max 16 million entries, we can easily handle that)
+-A FORWARD -i internode -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m multiport --dports 80,443,465,587,993 -m connlimit --connlimit-above 16 --connlimit-mask 24 --connlimit-saddr -j FWD_LOGDROP
+# to a webserver
+-A FORWARD -d <bridged-ip>/32 -p tcp -m multiport --dports 80,443 -j ACCEPT
+# to a mailserver
+-A FORWARD -d <bridged-ip>/32 -p tcp -m multiport --dports 80,443,465,587,993 -j ACCEPT
+
+# EOF
