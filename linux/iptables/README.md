@@ -1,6 +1,7 @@
 # IP tables
 So iptables is extensive. Yeah. Google, Cloudflare, etc run on Linux, too. It can do the job!
-Presuse "man iptables-extensions" for fun and education.
+Peruse "man iptables-extensions" for fun and education.
+Also refer to the Netfilter diagram (ref below, at Wikipedia and kept up-to-date) as it shows what happens where.
 
 ## But NetFilter?
 Yes. iptables already isn't what the kernel does, Netfilter currently just provides the legacy iptables interface.
@@ -24,5 +25,5 @@ Arjen says: “The less noise I let in, the less noise I have to monitor.”
 4. Use Cloudflare’s mmwatch 'sudo iptables-save -c | egrep "^\["' | grep -v "LOGDROP "
 
 Ref.
+- <https://en.wikipedia.org/wiki/Netfilter#/media/File:Netfilter-packet-flow.svg>
 - <https://github.com/cloudflare/cloudflare-blog/tree/master/2017-06-29-ssdp>
-
