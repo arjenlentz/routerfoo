@@ -2,11 +2,15 @@
 # by Arjen Lentz, arjen (at) lentz (dot) com (dot) au
 
 # Use Cloudflare’s DNS
-# 1.1.1.1/1.0.0.1, or 1.1.1.2/1.0.0.2 for extra malware filtering, plus secondary
-server=/#/1.1.1.2
-server=/#/1.0.0.2
+#server=/#/1.1.1.1
+#server=/#/1.0.0.1
 #server=/#/2606:4700:4700::1111
 #server=/#/2606:4700:4700::1001
+# or use these to get some malware domain blocking as well
+server=/#/1.1.1.2
+server=/#/1.0.0.2
+#server=/#/2606:4700:4700::1112
+#server=/#/2606:4700:4700::1002
 
 # Cache a fair number of lookups
 cache-size=8192
@@ -16,7 +20,7 @@ cache-size=8192
 # It appears that a 0.0.0.0 response works even better for apps than an NX_DOMAIN (not found).
 # Best updated with a script in /etc/cron.weekly
 
-# This is a a good list of ad servers
+# This is a decent list of ad servers
 # wget -O - "https://pgl.yoyo.org/as/serverlist.php?hostformat=nohtml" \
 #      | awk '{printf "0.0.0.0 %s\n", $1}' >/etc/dnsmasq_ad_servers
 addn-hosts=/etc/dnsmasq_ad_servers
