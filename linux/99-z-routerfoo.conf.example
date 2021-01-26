@@ -1,0 +1,112 @@
+# /etc/sysctl.d/99-z-routerfoo.conf
+# 99-z- prefix to hopefully ensure it's read in last
+# by arjen (at) lentz (dot) com (dot) au
+# bits from https://javapipe.com/blog/iptables-ddos-protection/
+
+# Kernel networking settings. Daunted? Yea, I was too...
+# The key point is, by default the Linux kernel networking foo is not particularly
+# - tuned (well)
+# - secure
+# - resistant to spoofing, floods, and DDoS
+# So one should tweak it “a bit”. Ha. Most of this actually applies for any host, not just routers.
+# Worst thing: try to find docs | understand.
+# Please help annotate this with wisdom on what/why!
+
+# mainly allow using a bit more memory for stuff
+net.core.netdev_max_backlog = 262144
+net.core.rmem_default = 31457280
+net.core.rmem_max = 67108864
+net.core.wmem_default = 31457280
+net.core.wmem_max = 67108864
+net.core.somaxconn = 65535
+net.core.optmem_max = 25165824
+
+# allow a larger # of connections
+net.netfilter.nf_conntrack_max = 10000000
+# tcp_loose is a doozy, when enabled it's ok to skip the SYN-SYNACK-ACK and presume there's a connection anyway!?
+net.netfilter.nf_conntrack_tcp_loose = 0
+
+# timeouts, don't let things linger forever
+net.netfilter.nf_conntrack_tcp_timeout_established = 1800
+net.netfilter.nf_conntrack_tcp_timeout_close = 10
+net.netfilter.nf_conntrack_tcp_timeout_close_wait = 10
+net.netfilter.nf_conntrack_tcp_timeout_fin_wait = 20
+net.netfilter.nf_conntrack_tcp_timeout_last_ack = 20
+net.netfilter.nf_conntrack_tcp_timeout_syn_recv = 20
+net.netfilter.nf_conntrack_tcp_timeout_syn_sent = 20
+net.netfilter.nf_conntrack_tcp_timeout_time_wait = 10
+
+# garbage collection
+net.ipv4.neigh.default.gc_thresh1 = 4096
+net.ipv4.neigh.default.gc_thresh2 = 8192
+net.ipv4.neigh.default.gc_thresh3 = 16384
+net.ipv4.neigh.default.gc_interval = 5
+net.ipv4.neigh.default.gc_stale_time = 120
+
+# Enable Spoof protection (Reverse Path filter)
+# Turn on Source Address Verification in all non-local interfaces
+# 0 No source address validation is performed and any packet is forwarded to the destination network
+# 1 Strict Mode as defined in RFC 3074. Each incoming packet to a router is tested against the routing table and if the interface that the packet is received on is not the best return path for the packet then the packet is dropped.
+# 2 Loose mode as defines in RFC 3074 Loose Reverse Path. Each incoming packet is tested against the route table and the packet is dropped if the source address is not routable through any interface. The allows for asymmetric routing where the return path may not be the same as the source path
+# Note: you may need 2 instead of 1 depending on how your VPN behaves
+net.ipv4.conf.default.rp_filter = 2
+net.ipv4.conf.all.rp_filter = 2
+net.ipv4.conf.lo.rp_filter = 0
+
+# Accept ICMP redirects only for gateways listed in our default gateway list (enabled by default)
+net.ipv4.conf.all.secure_redirects = 1
+
+# A "martian" is a valid packet that just arrives on a "wrong" interface of the device. It can happen and best to log (syslog) so that you can see.
+net.ipv4.conf.all.log_martians = 1
+
+# If we're a router
+net.ipv4.ip_forward = 1
+
+net.ipv4.ip_local_port_range = 1024 65000
+net.ipv4.ip_no_pmtu_disc = 1
+net.ipv4.route.flush = 1
+net.ipv4.route.max_size = 8048576
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+net.ipv4.udp_mem = 65536 131072 262144
+net.ipv4.udp_rmem_min = 16384
+net.ipv4.udp_wmem_min = 16384
+
+net.ipv4.tcp_slow_start_after_idle = 0
+net.ipv4.tcp_congestion_control = htcp
+net.ipv4.tcp_mem = 65536 131072 262144
+net.ipv4.tcp_rmem = 4096 87380 33554432
+net.ipv4.tcp_wmem = 4096 87380 33554432
+net.ipv4.tcp_max_tw_buckets = 1440000
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_max_orphans = 400000
+net.ipv4.tcp_window_scaling = 1
+net.ipv4.tcp_rfc1337 = 1
+net.ipv4.tcp_syncookies = 1
+
+# We don't want to keep re-sending SYNACK, if you don't get a response, most likely the originating SYN was spoofed.
+net.ipv4.tcp_synack_retries = 1
+# We want to retry our SYN a few times, but not lots.
+net.ipv4.tcp_syn_retries = 2
+
+net.ipv4.tcp_max_syn_backlog = 16384
+
+# tcp_timestamps (RFC-1323) used to produce an information leak: CVE-1999-0524 and scanning tools will report on it.
+# However, modern kernels do extra trickery to avoid leaking the system's actual time, so it's actually safe to enable.
+# See https://security.stackexchange.com/questions/111794/pros-and-cons-of-disabling-tcp-timestamps
+# Also TCP SYN cookies, and SYNPROXY, use timestamps
+net.ipv4.tcp_timestamps = 1
+
+net.ipv4.tcp_sack = 1
+net.ipv4.tcp_fack = 1
+net.ipv4.tcp_ecn = 2
+
+# Short-ish timeouts to prevent long-lingering connections
+net.ipv4.tcp_fin_timeout = 10
+net.ipv4.tcp_keepalive_time = 600
+net.ipv4.tcp_keepalive_intvl = 60
+net.ipv4.tcp_keepalive_probes = 10
+
+net.ipv4.tcp_no_metrics_save = 1
+
+# EOF
