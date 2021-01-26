@@ -1,0 +1,34 @@
+#!/bin/sh
+# by arjen (at) lentz (dot) com (dot) au
+
+# Because normal startup doesn't do this cleanly/reliably yet - aargh
+# lots of chickens and eggs, too.
+# if you know how to do this better, please let me know!
+
+# The /etc/iptables subdir is created as part of the persistent-iptables package
+
+# ipsets need to exist, otherwise iptables won't restore.
+# we save to /etc/iptables/ipset.v4 from update-ipsets.sh.example
+/usr/sbin/ipset restore </etc/iptables/ipset.v4
+
+# create the DNSmasq related ipsets (see dnsmasq/dns-ip-gate.txt)
+/usr/sbin/ipset -exist create inet.dnsmasq.list hash:ip family inet timeout 86400 counters
+/usr/sbin/ipset -exist create dns-ip-gate-allow.list hash:net family inet counters
+
+# restore iptables, incl counters
+/usr/sbin/iptables-restore -c -w 30 /etc/iptables/rules.v4
+
+# now up our upstream connection
+/usr/bin/pon hfc-internode
+
+# wait for PPP over HFC to sort itself
+wait 30
+
+# get wireguard going
+systemctl start wg-quick@wg0
+
+# Enable policy routing here
+# See policy routing wireguard/policy-based-routing.txt
+
+exit 0
+# EOF
