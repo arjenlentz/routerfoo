@@ -1,0 +1,21 @@
+#!/bin/bash
+# update-dnsmasq-banlists.sh.example
+# by arjen (at) lentz (dot) com (dot) au
+
+# You could put this script in /etc/cron.weekly (be sure to chmod +x)
+# It is presumed that this script runs as root (or through sudo), otherwise you can't write to /etc
+# Please feel encouraged to improve on this script and contribute back: make it better & safer!
+
+
+# We set -4 just in case IPv6 isn't working. If you're very sure, feel free to remove!
+
+# by Peter Lowe https://pgl.yoyo.org/adservers/
+# we just wrangle it from the raw data so we're flexible in what we output; the site does not offer a 0.0.0.0 version
+wget -4 -O - "https://pgl.yoyo.org/as/serverlist.php?hostformat=nohtml" | awk '{printf "0.0.0.0 %s\n", $1}' >/etc/dnsmasq_ad_servers
+
+# Awesome list by Dan Pollock and many contributors
+# Problem: the /zero/ (0.0.0.0) version is sent in HTML so we need to wrangle it slightly
+wget -4 -O - "https://someonewhocares.org/hosts/zero/" | grep "^0.0.0.0" >/etc/dnsmasq_bad_servers
+
+
+# EOF
