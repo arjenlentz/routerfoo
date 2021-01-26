@@ -55,4 +55,8 @@ do
 done
 
 
+# Save our ipsets, because we need to have them on reboot
+ipset save $1 >/etc/iptables/ipset.v4
+
+
 # EOF
