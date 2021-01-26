@@ -3,7 +3,7 @@
 # by arjen (at) lentz (dot) com (dot) au
 
 # ipset is our friend, feed it regularly
-# You could put this script in /etc/cron.weekly
+# You could put this script in /etc/cron.weekly (be sure to chmod +x)
 # It is presumed that this script runs as root (or through sudo), otherwise ipset won't let you do stuff
 # Please feel encouraged to improve on this script and contribute back: make it better & safer!
 
