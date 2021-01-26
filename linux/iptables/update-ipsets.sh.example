@@ -56,7 +56,7 @@ done
 
 
 # Save our ipsets, because we need to have them on reboot
-# make sure you have this file copied in from Arjen's router foo repo
+# make sure you have this script copied in from Arjen's router foo repo
 # (the iptables/netfilter-persistent scripts don't cover ipset)
 /usr/share/netfilter-persistent/plugins.d/05-ip4set save
 # alternatively uncomment this line
