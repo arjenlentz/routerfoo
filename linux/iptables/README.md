@@ -5,7 +5,7 @@ Also refer to the Netfilter diagram (ref below, at Wikipedia and kept up-to-date
 
 ## But NetFilter?
 Yes. iptables already isn't what the kernel does, Netfilter currently just provides the legacy iptables interface.
-In about three or so major kernels versions, the old iptables interfaces are going to go away completely.
+In about three or so major kernel versions, the old iptables interfaces are going to go away completely.
 
 However... while most of what we do can be done in Netfilter magic, ipset is not quite the same.
 I'm pretty sure the equivalent can be done, but I haven't worked that out yet.
