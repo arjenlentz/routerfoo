@@ -6,12 +6,16 @@
 # In iptables, be very specific: port 80 on a particular server.
 # So then, anything getting through from these networks will just be to port 80 on your web server, that's quite limited.
 # The identified network blocks are huge.
-# We'll just do a /24 around the IP we saw, is ok if the IPs don't change too often.
+# We'll just do a /24 around the IPs we saw, is ok if the IPs don't change too often.
 
 # 2021-01-30 3.0.0.0/9 AWS
 3.22.70.0/24
+3.128.26.0/24
 # 2021-01-30 34.192.0.0/10 AWS
 34.209.232.0/24
+34.211.6.0/24
+# 2021-01-30 64.78.144.0/20 Flexential Colorado Corp
+64.78.149.0/24
 # 2021-01-30 66.133.96.0/19 Flexential Colorado Corp
 66.133.109.0/24
 # 2021-01-30 18.128.0.0/9 AWS Munich
