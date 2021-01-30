@@ -4,8 +4,22 @@
 # Don't put too many things here, it defeats the purpose.
 
 # Valve - Steam
-162.254.192.0/21
 103.10.124.0/23
+153.254.86.0/24
+155.133.224.0/19
+162.254.192.0/21
+# i3D.net B.V. Tokyo
+103.194.164.0/22
+# i3D.net B.V. Australia
+109.200.212.0/22
+# i3D.net B.V. Hong Kong
+43.239.136.0/23
+# i3D.net B.V. The Netherlands
+43.239.138.0/23
+213.179.210.0/23
+
+# 35.192.0.0 - 35.207.255.255 Google Cloud 
+35.192.0.0/12
 
 # Blizzard entertainment - Overwatch
 # Very annoying they're also using Google Cloud and AWS, those are huge blocks
