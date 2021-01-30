@@ -3,8 +3,19 @@
 # I expect mainly gaming servers...
 # Don't put too many things here, it defeats the purpose.
 
-# Blizzard entertainment - Overwatch/Warthunder
-37.244.19.0/24
+# Blizzard entertainment - Overwatch
+# Very annoying they're also using Google Cloud, those are huge blocks
+# 37.244.0.0 - 37.244.63.255 Blizzard
+37.244.0.0/15
+# 24.105.0.0 - 24.105.63.255 Blizzard
+24.105.0.0/18
+# 34.64.0.0 - 34.127.255.255 Google Cloud
+34.64.0.0/10
+# 35.208.0.0 - 35.247.255.255 Google Cloud
+35.240.0.0/13
+# 63.251.0.0 - 63.251.255.255 Internap Holding LLC
+# 63.251.140.0 - 63.251.140.255 Vivox, Inc.
+63.251.140.0/24
 
 # Apple Facetime
 17.252.252.0/24
