@@ -2,6 +2,7 @@
 arjen (at) lentz (dot) com (dot) au
 
 First shown (in public) at Linux.conf.au 2021's SysAdmin miniconf, Sat 23 Jan 2021
+See abstract.md for the talk overview. The content of the slides is all in the repo files.
 
 ## What are we trying to achieve?
 - Learning experience
