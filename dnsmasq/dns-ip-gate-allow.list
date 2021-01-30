@@ -3,6 +3,10 @@
 # I expect mainly gaming servers...
 # Don't put too many things here, it defeats the purpose.
 
+# Valve - Steam
+162.254.192.0/21
+103.10.124.0/23
+
 # Blizzard entertainment - Overwatch
 # Very annoying they're also using Google Cloud and AWS, those are huge blocks
 # 37.244.0.0 - 37.244.63.255 Blizzard
