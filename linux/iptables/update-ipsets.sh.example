@@ -43,6 +43,9 @@ load_ipset() {
 wget -4 -O /tmp/inet.pingdom.list https://my.pingdom.com/probes/ipv4
 load_ipset "inet.pingdom.list" "hash:ip" /tmp/inet.pingdom.list
 
+wget -4 -O /tmp/inet.letsencrypt.list https://raw.githubusercontent.com/arjenlentz/routerfoo/main/linux/iptables/inet.letsencrypt.list
+load_ipset "inet.letsencrypt.list" "hash:net" /tmp/inet.letsencrypt.list
+
 wget -4 -O /tmp/inet.fullbogons.list https://www.team-cymru.org/Services/Bogons/fullbogons-ipv4.txt
 load_ipset "inet.fullbogons.zone" "hash:net" /tmp/inet.fullbogons.zone
 
