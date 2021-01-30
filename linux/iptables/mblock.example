@@ -6,24 +6,24 @@
 
 # mBLOCK: RETURN = allow through
 
+# An allow list for pingdom
 -A mBLOCK -m set --match-set inet.pingdom.list src -j RETURN
+
+# A rough allow list for Let’s Encrypt... note that DNS-01 verification is better
+-A mBLOCK -d <webserver> -t tcp -m tcp --dport 80 -m set --match-set inet.letsencrypt.list src -j RETURN
+
+# Friendly IPs. Like our own servers elsewhere
 -A mBLOCK -s <friendlyip>/32 -j RETURN
 -A mBLOCK -s <friendlynet>/24 -j RETURN
 
-# Yep, geo blocking. Reduce noise
+# Yep, geo blocking. We only allow traffic from these countries: reduce noise!
 -A mBLOCK -m set --match-set inet.au.zone src -j RETURN
 -A mBLOCK -m set --match-set inet.nl.zone src -j RETURN
-
-# Would be nice to also have a list for Let’s Encrypt... they don’t give one!
-# We can probably get it down to a [few] AS network(s), through monitoring?
-# Alternatively, we can either:
-# - allow the very noisy US block through when updating our certificates;
-# - Use the DNS verification method (best, however can be finicky to set up).
 
 # Invalid network ranges of any kind
 -A mBLOCK -m set --match-set inet.fullbogons.list src -j DROP
 
-# Swift byebye to everything else
+# Swift byebye to everything else (log/sample if you want to)
 -A mBLOCK -j DROP
 
 # EOF
