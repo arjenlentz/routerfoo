@@ -13,6 +13,11 @@ Linux
 =====
 Linux Kernel module via repo/DKMS, in 5.6 kernel
 
+Ensuring that WireGuard is always running:
+- sudo systemctl enable wg-quick@wg0.service
+- sudo systemctl daemon-reload
+- sudo systemctl start wg-quick@wg0.service
+
 Ubuntu
 ------
 Built-in with Ubuntu 20.04, in 5.4 kernel (Canonical backported the 5.6 stuff)
