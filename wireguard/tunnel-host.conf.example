@@ -6,6 +6,11 @@
 # This file is complete, it's literally all you need to make this work.
 # Note: you will require some firewall rules, of course.
 
+# To ensure that WireGuard is always on:
+# sudo systemctl enable wg-quick@wg0.service
+# sudo systemctl daemon-reload
+# sudo systemctl start wg-quick@wg0.service
+
 # Reminder how easy it is to generate private and pub key...
 # wg genkey | tee server-private.sec | wg pubkey > server-public.key
 
