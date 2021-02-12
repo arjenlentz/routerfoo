@@ -4,9 +4,13 @@
 # WG is peer-to-peer, but you'd have something like this on a (roaming) laptop.
 
 # This file is complete, it's literally all you need to make this work.
-# Note: you will require some firewall rules, of course.
-# You may need to ensure wg0 goes up (or even down/up) when any wired/wireless iface goes up
 # You can point resolv.conf at the pvt addr of the nameserver on the VPN server (or run a local DNSmasq)
+# Note: you will require some firewall rules, of course.
+
+# To ensure that WireGuard is always on:
+# sudo systemctl enable wg-quick@wg0.service
+# sudo systemctl daemon-reload
+# sudo systemctl start wg-quick@wg0.service
 
 # Reminder how easy it is to generate private and pub key...
 # wg genkey | tee server-private.sec | wg pubkey > server-public.key
