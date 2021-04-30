@@ -1,6 +1,6 @@
 # An ipset network allow list for Let's Encrypt
 # Networks we want to allow traffic from, bypassing the country blocks
-# Last updated 2021-01-30
+# Last updated 2021-04-30
 # Note that using DNS-01 validation is the better way.
 
 # In iptables, be very specific: port 80 on a particular server.
@@ -22,6 +22,17 @@
 18.196.96.0/24
 # 2021-01-30 52.28.0.0/15 AWS Munich
 52.28.236.88
+
+# 2021-04-30
+3.19.56.0/24
+3.120.130.0/24
+3.142.122.0/24
+3.122.178.0/24
+18.116.86.0/24
+18.184.114.0/24
+34.221.255.0/24
+52.39.4.0/24
+54.189.22.0/24
 
 # Your contributions!
 
