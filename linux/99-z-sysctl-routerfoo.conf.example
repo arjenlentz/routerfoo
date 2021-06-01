@@ -60,7 +60,7 @@ net.ipv4.conf.all.secure_redirects = 1
 net.ipv4.conf.all.log_martians = 1
 
 # If we're a router
-net.ipv4.ip_forward = 1
+#net.ipv4.ip_forward = 1
 
 net.ipv4.ip_local_port_range = 1024 65000
 net.ipv4.ip_no_pmtu_disc = 1
