@@ -53,6 +53,11 @@
 91.235.140.196
 91.235.140.197
 
+# Final Fantasy XIV
+# Japanese game - IP range is of NTT in US, makes sense
+#204.2.229.97
+204.2.229.0/24
+
 # Your contributions!
 
 # EOF
