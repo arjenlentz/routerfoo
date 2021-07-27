@@ -21,6 +21,14 @@ net.core.wmem_max = 67108864
 net.core.somaxconn = 65535
 net.core.optmem_max = 25165824
 
+# now some security
+# https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do#209533
+kernel.unprivileged_userns_clone = 0
+# don't allow unprivileged users to load BPF into the kernel
+kernel.unprivileged_bpf_disabled = 1
+# Enable JIT hardening for all users (inc. uid 0)
+net.core.bpf_jit_harden = 2
+
 # allow a larger # of connections
 net.netfilter.nf_conntrack_max = 10000000
 # tcp_loose is a doozy, when enabled it's ok to skip the SYN-SYNACK-ACK and presume there's a connection anyway!?
