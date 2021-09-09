@@ -2,11 +2,11 @@ I mentioned logging before dropping, as we don't want to just blindly drop stuff
 Logging is to syslog.
 
 Logging everything in this rule target:
--A mPRE_LOGDROP -m limit -j LOG --log-prefix "iptables mPRE: " --log-level 5
+-A mPRE_LOGDROP -j LOG --log-prefix "iptables mPRE: " --log-level 5
 -A mPRE_LOGDROP -j DROP
 
 or if you want only a sample rather than everything, add this:
-  --limit 3/min --limit-burst 20
+   -m limit --limit 3/min --limit-burst 20
 
 My naming scheme:
  - m for Mangle table
