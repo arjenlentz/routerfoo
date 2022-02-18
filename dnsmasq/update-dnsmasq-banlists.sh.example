@@ -11,11 +11,28 @@
 
 # by Peter Lowe https://pgl.yoyo.org/adservers/
 # we just wrangle it from the raw data so we're flexible in what we output; the site does not offer a 0.0.0.0 version
-wget -4 -O - "https://pgl.yoyo.org/as/serverlist.php?hostformat=nohtml" | awk '{printf "0.0.0.0 %s\n", $1}' >/etc/dnsmasq_ad_servers
+wget -4 -O - "https://pgl.yoyo.org/as/serverlist.php?hostformat=nohtml" 2> /etc/dnsmasq_ad_servers.err | awk '{printf "0.0.0.0 %s\n", $1}' >/etc/dnsmasq_ad_servers.new 2>&1
+if test $? -eq 0
+then
+   mv /etc/dnsmasq_ad_servers.new /etc/dnsmasq_ad_servers
+   /etc/dnsmasq_ad_servers.err
+else
+   cat /etc/dnsmasq_ad_servers.err | mail -s "$(date) someting went wrong fetching dnsmasq_ad_servers" arjen (at) lentz (dot) com (dot) au
+   rm /etc/dnsmasq_ad_servers.new /etc/dnsmasq_ad_servers.err
+   exit 1
+fi
 
 # Awesome list by Dan Pollock and many contributors
 # Problem: the /zero/ (0.0.0.0) version is sent in HTML so we need to wrangle it slightly
-wget -4 -O - "https://someonewhocares.org/hosts/zero/" | grep "^0.0.0.0" >/etc/dnsmasq_bad_servers
-
+wget -4 -O - "https://someonewhocares.org/hosts/zero/" 2> /etc/dnsmasq_bad_servers.err | grep "^0.0.0.0" >/etc/dnsmasq_bad_servers.new 2>&1
+if test $? -eq 0
+then
+   mv /etc/dnsmasq_bad_servers.new /etc/dnsmasq_bad_servers
+   rm /etc/dnsmasq_bad_servers.err
+else
+   cat /etc/dnsmasq_bad_servers.err | mail -s "$(date) someting went wrong fetching dnsmasq_bad_servers" arjen (at) lentz (dot) com (dot) au
+   rm /etc/dnsmasq_bad_servers.new /etc/dnsmasq_bad_servers.err
+   exit 1
+fi
 
 # EOF
